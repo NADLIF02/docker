@@ -12,24 +12,15 @@ RUN apt-get update && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update
 
-# Installer Apache, la dernière version de PHP disponible et les extensions nécessaires
-RUN apt-get install -y \
-    apache2 \
-    # Installer PHP et quelques extensions communes
-    php \
-    libapache2-mod-php \
-    php-cli \
-    php-fpm \
-    php-json \
-    php-common \
-    php-mysql \
-    php-zip \
-    php-gd \
-    php-mbstring \
-    php-curl \
-    php-xml \
-    php-pear \
-    php-bcmath \
+# Ajouter le PPA pour PHP et installer Apache2 et PHP
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:ondrej/php && \
+    apt-get update && \
+    apt-get install -y apache2 php libapache2-mod-php php-cli php-fpm php-json php-common php-mysql php-zip php-gd php-mbstring php-curl php-xml php-pear php-bcmath && \
+    a2enmod php && \
+    a2enmod rewrite
+
     # Outils supplémentaires
     unzip \
     wget
