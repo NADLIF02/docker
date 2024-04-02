@@ -35,7 +35,6 @@ RUN apt-get update && \
     wget && \
     a2enmod php7.4 && \
     a2enmod rewrite
-    rm -rf /var/lib/apt/lists/*
 
 
 RUN wget http://www.sentrifugo.com/home/downloadfile?file_name=Sentrifugo.zip -O Sentrifugo.zip
