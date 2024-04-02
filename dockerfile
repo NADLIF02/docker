@@ -11,9 +11,26 @@ ENV APACHE_LOG_DIR /var/log/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
 
-RUN apt-get update
-RUN apt-get install -y apache2 unzip php7.4 php7.4-common php7.4-mbstring php7.4-xmlrpc php7.4-soap php7.4-gd php7.4-xml php7.4-intl php7.4-mysql php7.4-cli php7.4-ldap php7.4-zip php7.4-curl wget
-rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apache2 \
+    unzip \
+    php7.4 \
+    php7.4-common \
+    php7.4-mbstring \
+    php7.4-xmlrpc \
+    php7.4-soap \
+    php7.4-gd \
+    php7.4-xml \
+    php7.4-intl \
+    php7.4-mysql \
+    php7.4-cli \
+    php7.4-ldap \
+    php7.4-zip \
+    php7.4-curl \
+    wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 
 RUN wget http://www.sentrifugo.com/home/downloadfile?file_name=Sentrifugo.zip -O Sentrifugo.zip
 RUN unzip Sentrifugo.zip
