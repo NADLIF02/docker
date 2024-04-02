@@ -9,8 +9,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./public_html:/var/www/html
-
+      - ./sentrifugo:/var/www/html/sentrifugo
   mysql:
     image: mysql:5.7
     container_name: mysql
