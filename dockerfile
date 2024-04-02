@@ -5,13 +5,17 @@ LABEL MAINTAINER="Docker version 1.0"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Mettre à jour les informations de paquet et installer Apache, PHP 8.0, et d'autres extensions nécessaires
+# Mettre à jour les informations de paquet
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
+    # Ajouter le PPA pour PHP d'Ondřej Surý
     add-apt-repository ppa:ondrej/php && \
-    apt-get update && \
-    apt-get install -y \
+    apt-get update
+
+# Installer Apache, la dernière version de PHP disponible et les extensions nécessaires
+RUN apt-get install -y \
     apache2 \
+    # Installer PHP et quelques extensions communes
     php \
     libapache2-mod-php \
     php-cli \
@@ -26,9 +30,13 @@ RUN apt-get update && \
     php-xml \
     php-pear \
     php-bcmath \
+    # Outils supplémentaires
     unzip \
-    wget && \
-    a2enmod php && \
+    wget
+
+# Activer le module PHP pour Apache
+# Apache2 utilise `libapache2-mod-php` qui active automatiquement le module PHP approprié.
+RUN a2enmod php && \
     a2enmod rewrite
 
 # Télécharger et installer Sentrifugo
@@ -39,7 +47,7 @@ RUN wget http://www.sentrifugo.com/home/downloadfile?file_name=Sentrifugo.zip -O
     chown -R www-data:www-data /var/www/html/sentrifugo/ && \
     chmod -R 755 /var/www/html/sentrifugo/
 
-# Modifier la configuration d'Apache pour servir Sentrifugo
+# Configurer Apache pour servir Sentrifugo
 RUN echo '<VirtualHost *:80>\n\
     ServerAdmin webmaster@localhost\n\
     DocumentRoot /var/www/html/sentrifugo\n\
