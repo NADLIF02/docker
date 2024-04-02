@@ -5,30 +5,30 @@ LABEL MAINTAINER="Docker version 1.0"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Mettre à jour les informations de paquet et installer Apache, PHP 8.3, et d'autres extensions nécessaires
+# Mettre à jour les informations de paquet et installer Apache, PHP 8.0, et d'autres extensions nécessaires
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y \
     apache2 \
-    php8.3 \
-    libapache2-mod-php8.3 \
-    php8.3-cli \
-    php8.3-fpm \
-    php8.3-json \
-    php8.3-common \
-    php8.3-mysql \
-    php8.3-zip \
-    php8.3-gd \
-    php8.3-mbstring \
-    php8.3-curl \
-    php8.3-xml \
-    php8.3-pear \
-    php8.3-bcmath \
+    php8.0 \
+    libapache2-mod-php8.0 \
+    php8.0-cli \
+    php8.0-fpm \
+    php8.0-json \
+    php8.0-common \
+    php8.0-mysql \
+    php8.0-zip \
+    php8.0-gd \
+    php8.0-mbstring \
+    php8.0-curl \
+    php8.0-xml \
+    php8.0-pear \
+    php8.0-bcmath \
     unzip \
     wget && \
-    a2enmod php8.3 && \
+    a2enmod php8.0 && \
     a2enmod rewrite
 
 # Télécharger et installer Sentrifugo
