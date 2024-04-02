@@ -33,7 +33,7 @@ RUN apt-get update && \
     php-bcmath \
     unzip \
     wget && \
-    a2enmod php7.4 && \
+    a2enmod php8.3 && \
     a2enmod rewrite
 
 
