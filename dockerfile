@@ -5,7 +5,9 @@ LABEL MAINTAINER="Docker version 1.0"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y software-properties-common && \
+# Mettre à jour les paquets et installer les prérequis
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y \
@@ -30,22 +32,26 @@ RUN apt-get update && apt-get install -y software-properties-common && \
 
 # Télécharger et installer Sentrifugo
 RUN wget http://www.sentrifugo.com/home/downloadfile?file_name=Sentrifugo.zip -O Sentrifugo.zip && \
-    unzip Sentrifugo.zip && \
-    mv Sentrifugo_3.2 /var/www/html/sentrifugo && \
-    rm Sentrifugo.zip && \
-    chown -R www-data:www-data /var/www/html/sentrifugo/ && \
-    chmod -R 755 /var/www/html/sentrifugo/
+    unzip Sentrifugo.zip -d /var/www/html/ && \
+    mv /var/www/html/Sentrifugo_3.2/* /var/www/html/ && \
+    rm -Rf Sentrifugo.zip /var/www/html/Sentrifugo_3.2 && \
+    chown -R www-data:www-data /var/www/html/ && \
+    chmod -R 755 /var/www/html/
 
-# Modifier la configuration d'Apache pour servir Sentrifugo
-RUN echo '<VirtualHost *:80>\n\
-    ServerAdmin webmaster@localhost\n\
-    DocumentRoot /var/www/html/sentrifugo\n\
-    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
-    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
-</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+# Configurer Apache pour servir Sentrifugo à la racine
+RUN sed -i 's|/var/www/html|/var/www/html/sentrifugo|g' /etc/apache2/sites-available/000-default.conf && \
+    sed -i 's|/var/www/|/var/www/html/sentrifugo|g' /etc/apache2/apache2.conf
 
-# Exposer le port 80 pour le serveur web
+# Activer le module mod_rewrite d'Apache pour Sentrifugo
+RUN a2enmod rewrite
+
+# Corriger les problèmes de .htaccess en permettant la réécriture dans /var/www
+RUN echo '<Directory "/var/www/html/sentrifugo">\n\
+    AllowOverride All\n\
+</Directory>' >> /etc/apache2/sites-available/000-default.conf
+
+# Exposer le port 80
 EXPOSE 80
 
-# Utiliser apache2ctl pour démarrer Apache en mode foreground
+# Démarrer Apache en premier plan
 CMD ["apache2ctl", "-D", "FOREGROUND"]
