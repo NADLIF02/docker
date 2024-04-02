@@ -36,7 +36,7 @@ RUN apt-get install -y \
 
 # Activer le module PHP pour Apache
 # Apache2 utilise `libapache2-mod-php` qui active automatiquement le module PHP approprié.
-RUN a2enmod php && \
+RUN a2enmod php8.0 && \
     a2enmod rewrite
 
 # Télécharger et installer Sentrifugo
