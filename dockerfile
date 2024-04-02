@@ -21,10 +21,7 @@ RUN apt-get update && \
     a2enmod php && \
     a2enmod rewrite
 
-    # Outils supplémentaires
-    unzip \
-    wget
-
+    
 # Activer le module PHP pour Apache
 # Apache2 utilise `libapache2-mod-php` qui active automatiquement le module PHP approprié.
 RUN a2enmod php8.0 && \
